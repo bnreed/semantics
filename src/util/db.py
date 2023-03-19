@@ -5,11 +5,15 @@ import pandas as pd
 import psycopg2
 import time
 from sqlalchemy import create_engine, text
+import logging
 
 # uses https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html
 # After run 
 # -- UPDATE documents SET  model_embedding_cos = model_embedding1 <=> model_embedding2;
 # -- UPDATE documents SET  question_embedding_cos = embedding1 <=> embedding2;
+
+logging.basicConfig(level=logging.DEBUG)
+
 class db:
 
     def __init__(self):
@@ -47,7 +51,9 @@ class db:
 
         logging.debug('db.query')
 
-        sql='SELECT * FROM ' + self.table + ' WHERE experiment_id = ' + str(experiment_id)
+        sql='SELECT * FROM ' + self.table + ' WHERE (model_response1 NOT LIKE \'Sorry%\') and (model_response2 NOT LIKE \'Sorry%\') and (experiment_id = ' + str(experiment_id) + ')'
+
+        logging.debug(sql)
 
         try:
             

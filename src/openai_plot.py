@@ -1,13 +1,21 @@
 from util import db
+import configparser
 import os
 import pandas as pd
 import pickle
 from util import db as database
+import logging
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 sns.set(style='ticks')
+
+config = configparser.RawConfigParser()   
+configFilePath = r'/nas/projects/EMSE6900/src/configuration.txt'
+config.read(configFilePath)
+
+logging.basicConfig(filename='myapp.log', level=logging.DEBUG)
 
 mydb = database.db()
 df = mydb.query(experiment_id='1678656036')
@@ -19,6 +27,8 @@ print(df)
 
 plotdf = df[['model_embedding_cos', 'question_embedding_cos', 'is_duplicate']].copy()
 plotdf = plotdf.abs()
+
+#plotdf = plotdf[plotdf["team"].str.contains("Team 1") == False]
 
 #fg = sns.FacetGrid(data=plotdf, hue='is_duplicate', hue_order=[0,1], aspect=1.61)
 #fg.map(plt.scatter, 'model_embedding_cos', 'question_embedding_cos').add_legend()
