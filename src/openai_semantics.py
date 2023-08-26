@@ -21,7 +21,7 @@ openai.organization =  os.getenv("OPENAI_API_ORG")
 openai.api_key = os.getenv("OPENAI_API_KEY")
 openai.api_base = "https://api.openai.com/v1"
 
-#prime = "Answer the question as truthfully as possible, and if you're unsure of the answer, say 'Sorry, I don't know'. "
+prime = "Answer the question as truthfully as possible, and if you're unsure of the answer, say 'Sorry, I don't know'. "
 
 server = 'basquiat'
 #server = 'kandinsky'
@@ -49,15 +49,13 @@ df = df.drop(columns=['model_response2'])
 df = df.drop(columns=['model_embedding1'])
 df = df.drop(columns=['model_embedding2'])
 
+#test debug against a small set
+#df = df.sample(n=5, random_state=1)
+
 pickle_dir = "data/"
 
 #df = df["id", "qid1", "qid2", "question1", "question2", "is_duplicate"]
 df = df.dropna()
-
-#test debug against a small set
-#df = df.sample(n=5, random_state=1)
-
-
 
 encoding = tiktoken.get_encoding(embedding_encoding)
 
@@ -79,24 +77,25 @@ def get_response(text, model) -> list[str]:
     # send a Completion request to count to 100
     response = openai.Completion.create(
         model=model,
-        #prompt = prime + " " + text,
-        prompt = text,
+        prompt = prime + " " + text,
+        #prompt = text,
         max_tokens=200,
         temperature=0,
     )
+    return response['choices'][0]['text']
     #response = openai.Answer.create(model=embedding_model, question=text, max_tokens=50, temperature=0)
 
-    outfile = pickle_dir + 'response.pkl'
-    with open(outfile, 'wb') as pickle_file:
-        pickle.dump(response, pickle_file)
+    #outfile = pickle_dir + 'response.pkl'
+    #with open(outfile, 'wb') as pickle_file:
+    #    pickle.dump(response, pickle_file)
 
-    return response['choices'][0]['text']
 
-df['embedding1'] = df.apply(lambda x: get_embedding(x['question1'], engine=EMBEDDING_MODEL), axis=1)
-df['embedding2'] = df.apply(lambda x: get_embedding(x['question2'], engine=EMBEDDING_MODEL), axis=1)
-print(df)
+
 df['model_response1'] = df.apply(lambda x: get_response(x['question1'], model=COMPLETIONS_MODEL), axis=1)
 df['model_response2'] = df.apply(lambda x: get_response(x['question2'], model=COMPLETIONS_MODEL), axis=1)
+print(df)
+df['embedding1'] = df.apply(lambda x: get_embedding(x['question1'], engine=EMBEDDING_MODEL), axis=1)
+df['embedding2'] = df.apply(lambda x: get_embedding(x['question2'], engine=EMBEDDING_MODEL), axis=1)
 print(df)
 df['model_embedding1'] = df.apply(lambda x: get_embedding(x['model_response1'], engine=EMBEDDING_MODEL), axis=1)
 df['model_embedding2'] = df.apply(lambda x: get_embedding(x['model_response2'], engine=EMBEDDING_MODEL), axis=1)
