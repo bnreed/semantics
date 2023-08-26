@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS public.documents
 (
     id bigint NOT NULL DEFAULT nextval('documents_id_seq'::regclass),
     question1 text COLLATE pg_catalog."default" NOT NULL,
-    embedding1 vector(1536) NOT NULL,
     experiment_id bigint,
     question2 text COLLATE pg_catalog."default" NOT NULL,
     embedding2 vector NOT NULL,
@@ -19,6 +18,7 @@ CREATE TABLE IF NOT EXISTS public.documents
     is_duplicate integer,
     model_embedding_cos double precision,
     question_embedding_cos double precision,
+    embedding1 vector NOT NULL,
     CONSTRAINT documents_pkey PRIMARY KEY (id)
 )
 
@@ -26,11 +26,3 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.documents
     OWNER to bnreed;
--- Index: documents_embedding_idx
-
--- DROP INDEX IF EXISTS public.documents_embedding_idx;
-
-CREATE INDEX IF NOT EXISTS documents_embedding_idx
-    ON public.documents USING ivfflat
-    (embedding1 vector_cosine_ops)
-    TABLESPACE pg_default;
