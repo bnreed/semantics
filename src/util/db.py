@@ -23,16 +23,19 @@ class db:
         time_stamp = calendar.timegm(current_GMT)
 
         config = configparser.RawConfigParser()   
+        #configFilePath = r'N:/projects/EMSE6900/src/configuration.txt'
         configFilePath = r'/nas/projects/EMSE6900/src/configuration.txt'
         config.read(configFilePath)
 
-        self.rdbms = config.get('kandinsky', 'rdbms')
-        self.username = config.get('kandinsky', 'username')
-        self.password = config.get('kandinsky', 'password')
-        self.host = config.get('kandinsky', 'host')
-        self.port = config.get('kandinsky', 'port')
-        self.database = config.get('kandinsky', 'database')
-        self.table = config.get('kandinsky', 'table')
+        server  = 'basquiat'
+
+        self.rdbms = config.get(server, 'rdbms')
+        self.username = config.get(server, 'username')
+        self.password = config.get(server, 'password')
+        self.host = config.get(server, 'host')
+        self.port = config.get(server, 'port')
+        self.database = config.get(server, 'database')
+        self.table = config.get(server, 'table')
 
     def insert_data_frame(self, df):
 

@@ -5,13 +5,14 @@ numpy
 openai
 pandas
 plotly
-psycopg2
+#psycopg2
 psycopg2-binary
 scikit-learn
 scipy
 seaborn
 sentence-transformers
 sentencepiece
+sqlalchemy
 tenacity
 tensorflow
 tiktoken
