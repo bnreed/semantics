@@ -12,6 +12,7 @@ scipy
 seaborn
 sentence-transformers
 sentencepiece
+sqlalchemy
 tenacity
 tensorflow
 tiktoken
