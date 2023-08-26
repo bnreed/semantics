@@ -7,6 +7,7 @@ import openai
 import time
 openai.organization =  os.getenv("OPENAI_API_ORG")
 openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_base = "https://api.openai.com/v1"
 
 models = openai.Model.list()
 for model in models.data:

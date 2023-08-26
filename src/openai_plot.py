@@ -12,13 +12,14 @@ import seaborn as sns
 sns.set(style='ticks')
 
 config = configparser.RawConfigParser()   
-configFilePath = r'/nas/projects/EMSE6900/src/configuration.txt'
+#configFilePath = r'/nas/projects/EMSE6900/src/configuration.txt'
+configFilePath = r'N:/projects/EMSE6900/src/configuration.txt'
 config.read(configFilePath)
 
 logging.basicConfig(filename='myapp.log', level=logging.DEBUG)
 
-mydb = database.db()
-df = mydb.query(experiment_id='1678656036')
+mydb = database.db('basquiat')
+df = mydb.query(experiment_id='1693075667')
 
 print(df)
 

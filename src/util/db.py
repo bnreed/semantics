@@ -16,18 +16,19 @@ logging.basicConfig(level=logging.DEBUG)
 
 class db:
 
-    def __init__(self):
+    def __init__(self, server):
         logging.debug('db.init')
 
         current_GMT = time.gmtime()
         time_stamp = calendar.timegm(current_GMT)
 
         config = configparser.RawConfigParser()   
-        #configFilePath = r'N:/projects/EMSE6900/src/configuration.txt'
-        configFilePath = r'/nas/projects/EMSE6900/src/configuration.txt'
+        configFilePath = r'N:/projects/EMSE6900/src/configuration.txt'
+        #configFilePath = r'/nas/projects/EMSE6900/src/configuration.txt'
         config.read(configFilePath)
 
-        server  = 'basquiat'
+        #server  = 'basquiat'
+        #server  = 'kandinsky'
 
         self.rdbms = config.get(server, 'rdbms')
         self.username = config.get(server, 'username')

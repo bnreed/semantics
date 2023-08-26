@@ -15,7 +15,16 @@ from openai.embeddings_utils import get_embedding
 
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 
-prime = "Answer the question as truthfully as possible, and if you're unsure of the answer, say 'Sorry, I don't know'. "
+
+# OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
+openai.organization =  os.getenv("OPENAI_API_ORG")
+openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_base = "https://api.openai.com/v1"
+
+#prime = "Answer the question as truthfully as possible, and if you're unsure of the answer, say 'Sorry, I don't know'. "
+
+server = 'basquiat'
+#server = 'kandinsky'
 
 # embedding model parameters
 COMPLETIONS_MODEL = "text-davinci-003"
@@ -24,19 +33,35 @@ EMBEDDING_MODEL = "text-embedding-ada-002"
 embedding_encoding = "cl100k_base"  # this the encoding for text-embedding-ada-002
 max_tokens = 200  # the maximum for text-embedding-ada-002 is 8191
 
-# load & inspect dataset
-input_datapath = "data/questions.csv"  
+# load & inspect full 60k row dataset
+#input_datapath = "data/questions.csv"  
+#df = pd.read_csv(input_datapath) #, index_col=0)
+
+# this is the 1000 row 1692850565 run locally
+# 1693075667 is openai
+df = pd.read_pickle("data/dataframe_1692850565.pkl") 
+df = df.drop(columns=['id'])
+
+df = df.drop(columns=['embedding1'])
+df = df.drop(columns=['embedding2'])
+df = df.drop(columns=['model_response1'])
+df = df.drop(columns=['model_response2'])
+df = df.drop(columns=['model_embedding1'])
+df = df.drop(columns=['model_embedding2'])
+
 pickle_dir = "data/"
-df = pd.read_csv(input_datapath) #, index_col=0)
+
 #df = df["id", "qid1", "qid2", "question1", "question2", "is_duplicate"]
 df = df.dropna()
 
 #test debug against a small set
-df = df.sample(n=5, random_state=1)
+#df = df.sample(n=5, random_state=1)
+
+
 
 encoding = tiktoken.get_encoding(embedding_encoding)
 
-print(df)
+#print(df)
 
 
 
@@ -84,10 +109,14 @@ df.to_pickle(pickle_dir + os.sep + 'dataframe_' + str(time_stamp) + '.pkl')
 
 df["experiment_id"] = time_stamp
 
+
 print(df.head())
 print(df.shape)
 
-mydb = database.db()
+
+
+
+mydb = database.db(server)
 mydb.insert_data_frame(df)
 
 
