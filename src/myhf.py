@@ -7,7 +7,7 @@ from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 import pandas as pd
 import pickle
 
-infile = '/nas/projects/EMSE6900/data/questions.csv'
+infile = 'N:/projects/EMSE6900/data/questions.csv'
 
 # read infile in to a dataframe
 df = pd.read_csv(infile)
