@@ -12,7 +12,8 @@ import logging
 # -- UPDATE documents SET  model_embedding_cos = model_embedding1 <=> model_embedding2;
 # -- UPDATE documents SET  question_embedding_cos = embedding1 <=> embedding2;
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.ERROR)
+#logging.basicConfig(level=logging.DEBUG)
 
 class db:
 
@@ -53,11 +54,12 @@ class db:
 
     def query(self, experiment_id):
 
-        logging.debug('db.query')
+        logging.debug('db.query to ' + experiment_id )
 
-        sql='SELECT * FROM ' + self.table + ' WHERE (model_response1 NOT LIKE \'Sorry%\') and (model_response2 NOT LIKE \'Sorry%\') and (experiment_id = ' + str(experiment_id) + ')'
+        #sql='SELECT * FROM ' + self.table + ' WHERE experiment_id = ' + str(experiment_id) + ')'
+        sql='SELECT * FROM ' + self.table + ' WHERE ((model_response1 NOT LIKE \'%Sorry%\') AND (model_response2 NOT LIKE \'%Sorry%\')) and (experiment_id = ' + str(experiment_id) + ')'
 
-        logging.debug(sql)
+        logging.error(sql)
 
         try:
             
@@ -68,6 +70,7 @@ class db:
                 # select all rows of the database that contain experiment_id of a specific value
                 df = pd.read_sql_query(sql=text(sql), con = conn)
                 logging.debug("Record selected successfully from table " + self.table)
+                print(df['model_response1'])
                 return df
 
         except (Exception, psycopg2.Error) as error:

@@ -5,7 +5,7 @@
 CREATE TABLE IF NOT EXISTS public.documents
 (
     id bigint NOT NULL DEFAULT nextval('documents_id_seq'::regclass),
-    question1 text COLLATE pg_catalog."default" NOT NULL,
+     question1 text COLLATE pg_catalog."default" NOT NULL,
     experiment_id bigint,
     question2 text COLLATE pg_catalog."default" NOT NULL,
     embedding2 vector NOT NULL,
