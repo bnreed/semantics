@@ -9,8 +9,12 @@ import logging
 
 # uses https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_sql.html
 # After run 
-# -- UPDATE documents SET  model_embedding_cos = model_embedding1 <=> model_embedding2;
-# -- UPDATE documents SET  question_embedding_cos = embedding1 <=> embedding2;
+
+# pgvector <=> is cosine distance, not cosine similarity
+# https://github.com/supabase/supabase/issues/12244
+
+# -- UPDATE documents SET  model_embedding_cos =  abs((model_embedding1 <=> model_embedding2) - 1);
+# -- UPDATE documents SET  question_embedding_cos = abs((question_embedding1 <=> question_embedding2) - 1);
 
 logging.basicConfig(level=logging.ERROR)
 #logging.basicConfig(level=logging.DEBUG)
@@ -24,8 +28,8 @@ class db:
         time_stamp = calendar.timegm(current_GMT)
 
         config = configparser.RawConfigParser()   
-        configFilePath = r'N:/projects/EMSE6900/src/configuration.txt'
-        #configFilePath = r'/nas/projects/EMSE6900/src/configuration.txt'
+        #configFilePath = r'N:/projects/EMSE6900/src/configuration.txt'
+        configFilePath = r'/nas/projects/EMSE6900/src/configuration.txt'
         config.read(configFilePath)
 
         #server  = 'basquiat'
