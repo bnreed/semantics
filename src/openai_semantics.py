@@ -16,10 +16,13 @@ from openai.embeddings_utils import get_embedding
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 
 
-# OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
 openai.organization =  os.getenv("OPENAI_API_ORG")
-openai.api_key = os.getenv("OPENAI_API_KEY")
-openai.api_base = "https://api.openai.com/v1"
+
+#openai.api_key = os.getenv("OPENAI_API_KEY")
+#openai.api_base = "https://api.openai.com/v1"
+
+openai.api_key="sk-111111111111111111111111111111111111111111111111"
+openai.api_base="http://127.0.0.1:5001/v1"
 
 prime = "Answer the question as truthfully as possible, and if you're unsure of the answer, say 'Sorry, I don't know'. "
 
@@ -27,8 +30,15 @@ server = 'basquiat'
 #server = 'kandinsky'
 
 # embedding model parameters
-COMPLETIONS_MODEL = "text-davinci-003"
-EMBEDDING_MODEL = "text-embedding-ada-002"
+# OpenAI
+#COMPLETIONS_MODEL = "text-davinci-003"      
+#EMBEDDING_MODEL = "text-embedding-ada-002" 
+
+# Oobabooga
+COMPLETIONS_MODEL = "gpt-3.5-turbo"         
+EMBEDDING_MODEL = "all-mpnet-base-v2"       
+
+PRIME = False
 
 embedding_encoding = "cl100k_base"  # this the encoding for text-embedding-ada-002
 max_tokens = 200  # the maximum for text-embedding-ada-002 is 8191
@@ -61,8 +71,6 @@ encoding = tiktoken.get_encoding(embedding_encoding)
 
 #print(df)
 
-
-
 # omit reviews that are too long to embed
 #df["n_tokens"] = df.combined.apply(lambda x: len(encoding.encode(x)))
 #df = df[df.n_tokens <= max_tokens].tail(top_n)
@@ -75,10 +83,14 @@ encoding = tiktoken.get_encoding(embedding_encoding)
 @retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(6))
 def get_response(text, model) -> list[str]:
     # send a Completion request to count to 100
+
+    prompt = text
+    if (PRIME):
+        prompt = prime + " " + text,
+
     response = openai.Completion.create(
         model=model,
-        prompt = prime + " " + text,
-        #prompt = text,
+        prompt = prompt,
         max_tokens=200,
         temperature=0,
     )
