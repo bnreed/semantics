@@ -19,7 +19,7 @@ config.read(configFilePath)
 logging.basicConfig(filename='myapp.log', level=logging.DEBUG)
 
 mydb = database.db('basquiat')
-df = mydb.query(experiment_id='1693162463')
+df = mydb.query(experiment_id='1693087408')
 
 print(df)
 
