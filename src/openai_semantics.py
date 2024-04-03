@@ -26,8 +26,8 @@ openai.api_base="http://127.0.0.1:5001/v1"
 
 prime = "Answer the question as truthfully as possible, and if you're unsure of the answer, say 'Sorry, I don't know'. "
 
-server = 'basquiat'
-#server = 'kandinsky'
+server = 'basquiat'   # Intel Core i9-13900K, 128GB DDR5 RAM, 2TB NVMe SSD, 1x NVidia RTX 4090  , Dual Boot Windows 11 Pro & RHEL9
+#server = 'kandinsky' # Intel Core i7-9800X , 128GB DDR4 RAM, 2TB NVMe SSD, 2x NVidia RTX 2080Ti, Dual Boot Windows 11 Pro & RHEL8
 
 # embedding model parameters
 # OpenAI
